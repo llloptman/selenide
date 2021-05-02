@@ -34,7 +34,7 @@ class SelenideTest {
         $("[placeholder='Дата встречи']").setValue(DatePlusCount(3));
         $("[name='name']").setValue("Василий - Петрович");
         $("[name='phone']").setValue("+71234567890");
-        $(".checkbox__box").click();
+//        $(".checkbox__box").click();
         $(".button").click();
         $(new Selectors.WithText("Успешно!")).waitUntil(Condition.visible,15000);
 
