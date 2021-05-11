@@ -31,7 +31,7 @@ class SelenideTest {
 
     @Test
     void shouldPass() {
-        String dateOfDelivery = LocalDate.now().plusDays(5)////Указать сколько дней до доставки
+        String dateOfDelivery = LocalDate.now().plusDays(3)////Указать сколько дней до доставки
                 .format(format);
 
         $("[placeholder='Город']").setValue("Москва");
