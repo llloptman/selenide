@@ -18,6 +18,9 @@ import static com.codeborne.selenide.Selenide.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SelenideTest {
+
+    DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
     @BeforeEach
     public void init() {
         open("http://localhost:9999/");
@@ -29,7 +32,7 @@ class SelenideTest {
     @Test
     void shouldPass() {
         String dateOfDelivery = LocalDate.now().plusDays(5)////Указать сколько дней до доставки
-                .format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+                .format(format);
 
         $("[placeholder='Город']").setValue("Москва");
         $("[placeholder='Дата встречи']").setValue(dateOfDelivery);
@@ -42,9 +45,10 @@ class SelenideTest {
                 .text(dateOfDelivery));
 
     }
-/*
-    Доп задача с городом
-*/
+
+    /*
+        Доп задача с городом
+    */
     @Test
     void shouldChooseCity() {
         $("[placeholder='Город']").setValue("рр");
@@ -52,30 +56,24 @@ class SelenideTest {
         $("[placeholder='Город']").shouldHave(Condition.value("Нарьян-Мар"));
 
     }
-/*
-Доп задача с календарем
- */
+
+    /*
+        Доп задача с календарем
+     */
     @Test
     void shouldPassByCalendar() {
+        LocalDate dateOfDelivery = LocalDate.now().plusDays(7);//Указать сколько дней до доставки
         SelenideElement calendar = $(".calendar__layout");
 
         $("[placeholder='Город']").setValue("Москва");
         $(".icon-button").click();
-        calendar.$(new Selectors.WithText(String.valueOf(LocalDate.now().plusDays(7)//Указать сколько дней до доставки
-                .getDayOfMonth()))).click();
+        calendar.$(new Selectors.WithText(String.valueOf(dateOfDelivery.getDayOfMonth()))).click();
         $("[name='name']").setValue("Василий - Петрович");
         $("[name='phone']").setValue("+71234567890");
         $(".checkbox__box").click();
         $(".button").click();
         $(new Selectors.WithText("Успешно!")).shouldBe(Condition.visible, Duration.ofSeconds(15));
         $(".notification__content").shouldHave(Condition
-                .text($("[placeholder='Дата встречи']").getValue()));
+                .text(dateOfDelivery.format(format)));
     }
-
-    @Test
-    void test(){
-        System.out.println(LocalDate.now().getDayOfMonth());
-        System.out.println(LocalDate.now().plusDays(3).getDayOfMonth());
-    }
-
 }
